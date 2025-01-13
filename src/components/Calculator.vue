@@ -47,16 +47,96 @@ const ans = () => {
   append(previous);
 };
 
-const append = (value) => {
+const hasDoubleOperation = (value) => {
+  let valueOp = false;
+  let lastOp = false;
+  let lastChar = display.value[display.value.length - 1];
+  if (
+    value === "+" ||
+    value === "-" ||
+    value === "*" ||
+    value === "/" ||
+    value === "."
+  ) {
+    valueOp = true;
+  }
+  if (
+    lastChar === "+" ||
+    lastChar === "-" ||
+    lastChar === "*" ||
+    lastChar === "/" ||
+    lastChar === "."
+  ) {
+    lastOp = true;
+  }
+  if (valueOp && lastOp) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+const hasDoubleDot = (value) => {
+  let segments = display.value.split(/[\+\-\*\/]/);
+  let lastSegment = segments[segments.length - 1];
+  let lastSegmentDot = lastSegment.includes(".");
+  if (lastSegmentDot && value.includes(".")) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+const hasIllegalZeroLead = (value) => {
+  let segments = display.value.split(/[\+\-\*\/]/);
+  let lastSegment = segments[segments.length - 1];
+  let isOp = false;
+  if (
+    value === "+" ||
+    value === "-" ||
+    value === "*" ||
+    value === "/" ||
+    value === "."
+  ) {
+    isOp = true;
+  }
+  if (
+    lastSegment.startsWith("0") &&
+    lastSegment.length === 1 &&
+    segments.length > 1 &&
+    isOp === false
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+const isInvalid = (value) => {
   if (
     display.value === "Infinity" ||
     display.value === "-Infinity" ||
     display.value === "Error" ||
+    display.value === "NaN" ||
     display.value === "." ||
     (display.value === "0" && value === "0")
   ) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+const append = (value) => {
+  if (
+    hasDoubleOperation(value) ||
+    hasDoubleDot(value) ||
+    hasIllegalZeroLead(value) ||
+    isInvalid(value)
+  ) {
     return;
-  } else if (display.value === "0" && value !== "0" && value !== ".") {
+  }
+  if (display.value === "0" && value !== "0" && value !== ".") {
     display.value = value;
   } else {
     display.value += value;
@@ -75,18 +155,24 @@ const del = () => {
   } else {
     display.value = "0";
   }
+  if (display.value === "") {
+    display.value = "0";
+  }
 };
 
 const calculate = () => {
   if (
     display.value === "Infinity" ||
     display.value === "-Infinity" ||
-    display.value === "Error"
+    display.value === "Error" ||
+    display.value === "NaN" ||
+    display.value.length === 1
   )
     return;
   try {
     let equation = display.value;
-    let answer = eval(equation).toString();
+    let result = parseFloat(eval(equation).toFixed(12));
+    let answer = result.toString();
     let historyItem = `${equation} = ${answer}`;
     history.value.push(historyItem);
     display.value = answer;
