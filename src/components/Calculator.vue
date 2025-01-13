@@ -36,6 +36,7 @@ import { ref, onMounted, onUnmounted } from "vue";
 
 const display = ref("0");
 const history = ref([]);
+const pressedKeys = ref([]);
 let previous = "";
 
 const clear = () => {
@@ -98,6 +99,12 @@ const calculate = () => {
 
 const keyPress = (event) => {
   const key = event.key;
+  if (pressedKeys.value.includes(key)) {
+    return;
+  } else {
+    pressedKeys.value.push(key);
+  }
+  event.preventDefault();
   if (key >= "0" && key <= "9") {
     append(key);
   } else if (key === "+" || key === "-" || key === "*" || key === "/") {
@@ -111,24 +118,37 @@ const keyPress = (event) => {
   }
 };
 
+const keyRelease = (event) => {
+  const key = event.key;
+  if (pressedKeys.value.includes(key)) {
+    let index = pressedKeys.value.indexOf(key);
+    pressedKeys.value.splice(index, 1);
+  }
+};
+
 onMounted(() => {
   document.addEventListener("keydown", keyPress);
+  document.addEventListener("keyup", keyRelease);
 });
 
 onUnmounted(() => {
   document.removeEventListener("keydown", keyPress);
+  document.removeEventListener("keyup", keyRelease);
 });
 </script>
 
 <style scoped>
 .calculator {
+  --primary-color: rgb(82, 82, 82);
+  --secondary-color: rgb(254, 109, 56);
+  --text-color: white;
   top: 35%;
   left: 50%;
   width: 300px;
   height: 300px;
   position: fixed;
   transform: translate(-50%, -50%);
-  color: white;
+  color: var(--text-color);
 }
 
 .display {
@@ -142,7 +162,7 @@ onUnmounted(() => {
   align-items: center;
   padding-left: 1rem;
   margin-bottom: 20px;
-  background-color: rgb(82, 82, 82);
+  background-color: var(--primary-color);
   border-radius: 5px;
 }
 
@@ -164,20 +184,20 @@ onUnmounted(() => {
   border: 1px solid black;
   box-sizing: border-box;
   overflow-y: scroll;
-  background-color: rgb(82, 82, 82);
+  background-color: var(--primary-color);
   border-radius: 5px;
   padding-left: 1rem;
 }
 
 .btn {
-  background-color: rgb(82, 82, 82);
+  background-color: var(--primary-color);
   border-radius: 5px;
-  color: white;
+  color: var(--text-color);
 }
 
 .btn-op {
-  background-color: rgb(255, 116, 66);
+  background-color: var(--secondary-color);
   border-radius: 5px;
-  color: white;
+  color: var(--text-color);
 }
 </style>
