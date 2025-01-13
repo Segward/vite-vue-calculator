@@ -10,5 +10,6 @@ import Calculator from "./components/Calculator.vue";
 body,
 html {
   background-image: url("https://i.redd.it/8qts3ul2dcwd1.gif");
+  font-family:'Times New Roman', Times, serif;
 }
 </style>

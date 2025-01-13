@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 
 const display = ref("0");
 const history = ref([]);
@@ -43,7 +43,7 @@ const clear = () => {
 };
 
 const ans = () => {
-  display.value += previous;
+  append(previous);
 };
 
 const append = (value) => {
@@ -95,6 +95,29 @@ const calculate = () => {
     display.value = "Error";
   }
 };
+
+const keyPress = (event) => {
+  const key = event.key;
+  if (key >= "0" && key <= "9") {
+    append(key);
+  } else if (key === "+" || key === "-" || key === "*" || key === "/") {
+    append(key);
+  } else if (key === ".") {
+    append(key);
+  } else if (key === "Enter") {
+    calculate();
+  } else if (key === "Backspace") {
+    del();
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("keydown", keyPress);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("keydown", keyPress);
+});
 </script>
 
 <style scoped>
