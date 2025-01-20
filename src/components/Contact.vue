@@ -1,4 +1,5 @@
 <template>
+  <Navigator />
   <div class="contact">
     <h1>Contact Us</h1>
     <form @submit.prevent="submitForm">
@@ -19,7 +20,9 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import Navigator from "./Navigator.vue";
+</script>
 
 <style scoped>
 .contact {

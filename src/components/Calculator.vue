@@ -1,4 +1,5 @@
 <template>
+  <Navigator />
   <div class="calculator">
     <div class="display">{{ display }}</div>
     <div class="buttons">
@@ -33,6 +34,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
+import Navigator from "./Navigator.vue";
 
 const display = ref("0");
 const history = ref([]);
