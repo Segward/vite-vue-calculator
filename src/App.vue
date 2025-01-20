@@ -1,9 +1,15 @@
 <template>
-  <Calculator />
+  <router-view />
 </template>
 
 <script setup>
-import Calculator from "./components/Calculator.vue";
+import { onMounted } from "vue";
+import { useRouter } from "vue-router";
+
+onMounted(() => {
+  const router = useRouter();
+  console.log("Current route:", router.currentRoute.value);
+});
 </script>
 
 <style>
