@@ -21,11 +21,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
 import Navigator from "./Navigator.vue";
 
-const name = ref('');
-const email = ref('');
+const store = useStore();
+
+const name = ref(store.getters.getName);
+const email = ref(store.getters.getEmail);
 const message = ref('');
 const submittable = ref(false);
 
@@ -47,18 +50,25 @@ const validateForm = () => {
       validateName(name.value) && 
       validateMessage(message.value)) {
     submittable.value = true;
-      } else {
+  } else {
     submittable.value = false;
   }
 };
 
-const submitForm = () => {
+const submitForm = async () => {
   if (submittable.value) {
     alert("Form submitted successfully!");
+    await store.dispatch('saveUserData', {name: name.value, email: email.value});
   } else {
     alert("Please fill out the form correctly.");
   }
 };
+
+onMounted(async () => {
+  await store.dispatch('loadUserData');
+  name.value = store.getters.getName;
+  email.value = store.getters.getEmail;
+});
 </script>
 
 <style scoped>
@@ -85,5 +95,13 @@ textarea {
   width: 300px;
   height: 100px;
   margin-bottom: 10px;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
 }
 </style>
