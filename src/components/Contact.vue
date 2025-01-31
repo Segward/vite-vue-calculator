@@ -5,23 +5,60 @@
     <form @submit.prevent="submitForm">
       <div class="form-group">
         <h2>Enter your name</h2>
-        <input type="text" id="name" />
+        <input type="text" id="name" v-model="name" @input="validateForm" />
       </div>
       <div>
         <h2>Enter your email</h2>
-        <input type="email" id="email" />
+        <input type="email" id="email" v-model="email" @input="validateForm" />
       </div>
       <div>
         <h2>Enter your message</h2>
-        <textarea id="message"></textarea>
+        <textarea id="message" v-model="message" @input="validateForm"></textarea>
       </div>
-      <button type="submit">Submit</button>
+      <button type="submit" :disabled="!submittable">Submit</button>
     </form>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import Navigator from "./Navigator.vue";
+
+const name = ref('');
+const email = ref('');
+const message = ref('');
+const submittable = ref(false);
+
+const validateEmail = (email) => {
+  const re = /\S+@\S+\.\S+/;
+  return re.test(email);
+};
+
+const validateName = (name) => {
+  return name.length > 0;
+};
+
+const validateMessage = (message) => {
+  return message.length > 0;
+};
+
+const validateForm = () => {
+  if (validateEmail(email.value) && 
+      validateName(name.value) && 
+      validateMessage(message.value)) {
+    submittable.value = true;
+      } else {
+    submittable.value = false;
+  }
+};
+
+const submitForm = () => {
+  if (submittable.value) {
+    alert("Form submitted successfully!");
+  } else {
+    alert("Please fill out the form correctly.");
+  }
+};
 </script>
 
 <style scoped>
