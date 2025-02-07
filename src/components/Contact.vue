@@ -13,7 +13,11 @@
       </div>
       <div>
         <h2>Enter your message</h2>
-        <textarea id="message" v-model="message" @input="validateForm"></textarea>
+        <textarea
+          id="message"
+          v-model="message"
+          @input="validateForm"
+        ></textarea>
       </div>
       <button type="submit" :disabled="!submittable">Submit</button>
     </form>
@@ -21,15 +25,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useStore } from 'vuex';
+import { ref, onMounted } from "vue";
+import { useStore } from "vuex";
 import Navigator from "./Navigator.vue";
 
 const store = useStore();
-
 const name = ref(store.getters.getName);
 const email = ref(store.getters.getEmail);
-const message = ref('');
+const message = ref(store.getters.getMessage);
 const submittable = ref(false);
 
 const validateEmail = (email) => {
@@ -46,9 +49,11 @@ const validateMessage = (message) => {
 };
 
 const validateForm = () => {
-  if (validateEmail(email.value) && 
-      validateName(name.value) && 
-      validateMessage(message.value)) {
+  if (
+    validateEmail(email.value) &&
+    validateName(name.value) &&
+    validateMessage(message.value)
+  ) {
     submittable.value = true;
   } else {
     submittable.value = false;
@@ -58,16 +63,21 @@ const validateForm = () => {
 const submitForm = async () => {
   if (submittable.value) {
     alert("Form submitted successfully!");
-    await store.dispatch('saveUserData', {name: name.value, email: email.value});
+    await store.dispatch("saveUserData", {
+      name: name.value,
+      email: email.value,
+      message: message.value
+    });
   } else {
     alert("Please fill out the form correctly.");
   }
 };
 
 onMounted(async () => {
-  await store.dispatch('loadUserData');
+  await store.dispatch("loadUserData");
   name.value = store.getters.getName;
   email.value = store.getters.getEmail;
+  message.value = store.getters.getMessage;
 });
 </script>
 
