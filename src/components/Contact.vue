@@ -66,7 +66,7 @@ const submitForm = async () => {
     await store.dispatch("saveUserData", {
       name: name.value,
       email: email.value,
-      message: message.value
+      message: message.value,
     });
   } else {
     alert("Please fill out the form correctly.");

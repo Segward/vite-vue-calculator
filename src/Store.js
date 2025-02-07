@@ -7,7 +7,7 @@ export default createStore({
   state: {
     name: "",
     email: "",
-    message: ""
+    message: "",
   },
   mutations: {
     setName(state, name) {
@@ -18,27 +18,35 @@ export default createStore({
     },
     setMessage(state, message) {
       state.message = message;
-    }
+    },
   },
   actions: {
     async saveUserData({ commit }, { name, email, message }) {
       commit("setName", name);
       commit("setEmail", email);
       commit("setMessage", message);
-      await axios.post(apiUrl, { name, email, message });
+      try {
+        await axios.post(apiUrl, { name, email, message });
+      } catch (error) {
+        console.error("Error saving user data:", error);
+      }
     },
     async loadUserData({ commit }) {
-      const response = await axios.get(apiUrl);
-      if (response.data.length > 0) {
-        commit("setName", response.data[0].name);
-        commit("setEmail", response.data[0].email);
-        commit("setMessage", response.data[0].message);
+      try {
+        const response = await axios.get(apiUrl);
+        if (response.data.length > 0) {
+          commit("setName", response.data[0].name);
+          commit("setEmail", response.data[0].email);
+          commit("setMessage", response.data[0].message);
+        }
+      } catch (error) {
+        console.error("Error loading user data:", error);
       }
-    }
+    },
   },
   getters: {
     getName: (state) => state.name,
     getEmail: (state) => state.email,
     getMessage: (state) => state.message,
-  }
+  },
 });
