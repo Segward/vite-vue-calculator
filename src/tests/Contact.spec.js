@@ -16,6 +16,10 @@ describe("Contact.vue", () => {
 
   it("renders contact form", () => {
     expect(wrapper.find("form").exists()).toBe(true);
+    expect(wrapper.find("#name").exists()).toBe(true);
+    expect(wrapper.find("#email").exists()).toBe(true);
+    expect(wrapper.find("#message").exists()).toBe(true);
+    expect(wrapper.find('button[type="submit"]').exists()).toBe(true);
   });
 
   it("submit successfull contact form", async () => {
