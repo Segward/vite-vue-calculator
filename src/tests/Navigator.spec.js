@@ -12,18 +12,13 @@ describe("Navigator.vue", () => {
   it("renders navigation buttons", () => {
     const buttons = wrapper.findAll("button");
     expect(buttons.length).toBe(2);
-    const calculatorButton = buttons[0];
-    const contactButton = buttons[1];
-    expect(calculatorButton.text()).toBe("Calculator");
-    expect(contactButton.text()).toBe("Contact");
+    expect(buttons[0].text()).toBe("Calculator");
+    expect(buttons[1].text()).toBe("Contact");
   });
 
   it("has correct links", () => {
     const links = wrapper.findAll("a");
-    expect(links.length).toBe(2);
-    const calculatorLink = links[0];
-    const contactLink = links[1];
-    expect(calculatorLink.attributes("href")).toBe("/");
-    expect(contactLink.attributes("href")).toBe("/contact");
+    expect(links[0].attributes("href")).toBe("/");
+    expect(links[1].attributes("href")).toBe("/contact");
   });
 });
