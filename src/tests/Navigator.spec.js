@@ -1,10 +1,15 @@
 import { mount } from "@vue/test-utils";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import Navigator from "../components/Navigator.vue";
 
 describe("Navigator.vue", () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = mount(Navigator);
+  });
+
   it("renders navigation buttons", () => {
-    const wrapper = mount(Navigator);
     const buttons = wrapper.findAll("button");
     expect(buttons.length).toBe(2);
     const calculatorButton = buttons[0];
@@ -14,7 +19,6 @@ describe("Navigator.vue", () => {
   });
 
   it("has correct links", () => {
-    const wrapper = mount(Navigator);
     const links = wrapper.findAll("a");
     expect(links.length).toBe(2);
     const calculatorLink = links[0];
