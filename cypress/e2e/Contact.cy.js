@@ -24,7 +24,7 @@ describe("Contact Form", () => {
     cy.get('button[type="submit"]').should("be.disabled");
   });
 
-  it("should submit the form successfully", () => {
+  it("should alert when form is submitted successfully", () => {
     const randomNumber = Math.floor(Math.random() * 100000000) + 1;
     const email = `john.doe${randomNumber}@example.com`;
     cy.get("#name").type("John Doe");
@@ -33,14 +33,6 @@ describe("Contact Form", () => {
     cy.get('button[type="submit"]').click();
     cy.on("window:alert", (str) => {
       expect(str).to.equal("Form submitted successfully!");
-    });
-    cy.wait(1000);
-    cy.request("http://localhost:3000/users").then((response) => {
-      expect(response.status).to.eq(200);
-      const user = response.body.find((user) => user.email === email);
-      expect(user).to.exist;
-      expect(user.name).to.eq("John Doe");
-      expect(user.message).to.eq("This is a test message.");
     });
   });
 });

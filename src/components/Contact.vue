@@ -62,13 +62,12 @@ const validateForm = () => {
 
 const submitForm = async () => {
   if (submittable.value) {
-    let response = await store.dispatch("saveUserData", {
+    const response = await store.dispatch("saveUserData", {
       name: name.value,
       email: email.value,
       message: message.value,
     });
-    console.log(response);
-    if (response.status === 200 || response.status === 201) {
+    if (response && (response.status === 200 || response.status === 201)) {
       name.value = "";
       email.value = "";
       message.value = "";
@@ -80,6 +79,10 @@ const submitForm = async () => {
     alert("Please fill out the form correctly.");
   }
 };
+
+onMounted(async () => {
+  await store.dispatch("loadUserData");
+});
 </script>
 
 <style scoped>
