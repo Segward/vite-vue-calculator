@@ -35,6 +35,18 @@
       "name": "Segward",
       "email": "gustavhaverstad@gmail.com",
       "message": "hello world!"
+    },
+    {
+      "id": "ab11",
+      "name": "John Doe",
+      "email": "john.doe88503307@example.com",
+      "message": "This is a test message."
+    },
+    {
+      "id": "3e2f",
+      "name": "John Doe",
+      "email": "john.doe22555360@example.com",
+      "message": "This is a test message."
     }
   ]
 }
