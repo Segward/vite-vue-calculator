@@ -75,9 +75,6 @@ const submitForm = async () => {
 
 onMounted(async () => {
   await store.dispatch("loadUserData");
-  name.value = store.getters.getName;
-  email.value = store.getters.getEmail;
-  message.value = store.getters.getMessage;
 });
 </script>
 

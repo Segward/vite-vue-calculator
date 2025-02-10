@@ -22,42 +22,26 @@ describe("Contact.vue", () => {
     expect(wrapper.find('button[type="submit"]').exists()).toBe(true);
   });
 
-  it("submit successfull contact form", async () => {
-    const wrapper = mount(Contact, {
-      global: {
-        plugins: [store],
-      },
-    });
-    wrapper.find("#name").setValue("John Doe");
-    wrapper.find("#email").setValue("john.doe@example.com");
-    wrapper.find("#message").setValue("This is a test message.");
-    await wrapper.find("form").trigger("submit.prevent");
+  it("enabled submit button with valid contact form", async () => {
+    await wrapper.find("#name").setValue("John Doe");
+    await wrapper.find("#email").setValue("john.doe@example.com");
+    await wrapper.find("#message").setValue("This is a test message.");
     const submitButton = wrapper.find('button[type="submit"]');
     expect(submitButton.element.disabled).toBe(false);
   });
 
-  it("submit contact form with invalid email", async () => {
-    const wrapper = mount(Contact, {
-      global: {
-        plugins: [store],
-      },
-    });
-    wrapper.find("#name").setValue("John Doe");
-    wrapper.find("#email").setValue("john.doe.not-an-email");
-    wrapper.find("#message").setValue("This is a test message.");
+  it("disabled submit button with invalid email", async () => {
+    await wrapper.find("#name").setValue("John Doe");
+    await wrapper.find("#email").setValue("john.doe.not-an-email");
+    await wrapper.find("#message").setValue("This is a test message.");
     const submitButton = wrapper.find('button[type="submit"]');
     expect(submitButton.element.disabled).toBe(true);
   });
 
-  it("submit contact form with empty fields", async () => {
-    const wrapper = mount(Contact, {
-      global: {
-        plugins: [store],
-      },
-    });
-    wrapper.find("#name").setValue("");
-    wrapper.find("#email").setValue("");
-    wrapper.find("#message").setValue("");
+  it("disabled submit button with empty fields", async () => {
+    await wrapper.find("#name").setValue("");
+    await wrapper.find("#email").setValue("");
+    await wrapper.find("#message").setValue("");
     const submitButton = wrapper.find('button[type="submit"]');
     expect(submitButton.element.disabled).toBe(true);
   });
@@ -66,9 +50,9 @@ describe("Contact.vue", () => {
     const randomNumber = Math.floor(Math.random() * 100000000) + 1;
     const email = `john.doe${randomNumber}@example.com`;
     const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
-    wrapper.find("#name").setValue("John Doe");
-    wrapper.find("#email").setValue(email);
-    wrapper.find("#message").setValue("This is a test message.");
+    await wrapper.find("#name").setValue("John Doe");
+    await wrapper.find("#email").setValue(email);
+    await wrapper.find("#message").setValue("This is a test message.");
     await wrapper.find("form").trigger("submit.prevent");
     expect(alertSpy).toHaveBeenCalledWith("Form submitted successfully!");
     alertSpy.mockRestore();

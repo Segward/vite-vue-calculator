@@ -6,7 +6,6 @@ describe("Vuex Store", () => {
   it("should add user data to db.json", () => {
     const randomNumber = Math.floor(Math.random() * 100000000) + 1;
     const email = `john.doe${randomNumber}@example.com`;
-
     cy.get("#name").clear();
     cy.get("#email").clear();
     cy.get("#message").clear();
