@@ -26,23 +26,13 @@ export default createStore({
       commit("setEmail", email);
       commit("setMessage", message);
       try {
-        await axios.post(apiUrl, { name, email, message });
+        const response = await axios.post(apiUrl, { name, email, message });
+        return response;
       } catch (error) {
         console.error("Error saving user data:", error);
+        throw error;
       }
-    },
-    async loadUserData({ commit }) {
-      try {
-        const response = await axios.get(apiUrl);
-        if (response.data.length > 0) {
-          commit("setName", response.data[0].name);
-          commit("setEmail", response.data[0].email);
-          commit("setMessage", response.data[0].message);
-        }
-      } catch (error) {
-        console.error("Error loading user data:", error);
-      }
-    },
+    }
   },
   getters: {
     getName: (state) => state.name,

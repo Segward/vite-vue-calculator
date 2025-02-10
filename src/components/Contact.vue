@@ -62,20 +62,24 @@ const validateForm = () => {
 
 const submitForm = async () => {
   if (submittable.value) {
-    alert("Form submitted successfully!");
-    await store.dispatch("saveUserData", {
+    let response = await store.dispatch("saveUserData", {
       name: name.value,
       email: email.value,
       message: message.value,
     });
+    console.log(response);
+    if (response.status === 200 || response.status === 201) {
+      name.value = "";
+      email.value = "";
+      message.value = "";
+      alert("Form submitted successfully!");
+    } else {
+      alert("There was an error submitting the form.");
+    }
   } else {
     alert("Please fill out the form correctly.");
   }
 };
-
-onMounted(async () => {
-  await store.dispatch("loadUserData");
-});
 </script>
 
 <style scoped>
