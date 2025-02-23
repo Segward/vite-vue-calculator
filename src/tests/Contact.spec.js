@@ -1,6 +1,5 @@
 import { mount } from "@vue/test-utils";
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import axios from "axios";
 import Contact from "../components/Contact.vue";
 import store from "../Store";
 

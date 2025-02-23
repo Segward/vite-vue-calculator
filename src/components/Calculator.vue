@@ -35,6 +35,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 import Navigator from "./Navigator.vue";
+import axios from "axios";
 
 const display = ref("0");
 const history = ref([]);
@@ -162,7 +163,19 @@ const del = () => {
   }
 };
 
-const calculate = () => {
+const getEquationResult = async (equation) => {
+  try {
+    const result = await axios.get(
+      "http://localhost:8080/calculate?equation=" + encodeURIComponent(equation)
+    );
+    return result.data.message;
+  } catch (error) {
+    console.error(error);
+    return "Error";
+  }
+};
+
+const calculate = async () => {
   if (
     display.value === "Infinity" ||
     display.value === "-Infinity" ||
@@ -173,8 +186,7 @@ const calculate = () => {
     return;
   try {
     let equation = display.value;
-    let result = parseFloat(eval(equation).toFixed(12));
-    let answer = result.toString();
+    let answer = await getEquationResult(equation);
     let historyItem = `${equation} = ${answer}`;
     history.value.push(historyItem);
     display.value = answer;

@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import Calculator from "../components/Calculator.vue";
 
 describe("Calculator.vue", () => {
@@ -88,5 +88,37 @@ describe("Calculator.vue", () => {
     await button1.trigger("click");
     await clearButton.trigger("click");
     expect(wrapper.find(".display").text()).toBe("0");
+  });
+
+  it("pressing equals button calls calculate method", async () => {
+    const operators = wrapper.findAll(".btn-op");
+    const equalsSpy = vi.spyOn(wrapper.vm, "calculate");
+    const equalsButton = operators[4];
+    await equalsButton.trigger("click");
+    expect(equalsSpy).toHaveBeenCalled();
+  });
+
+  it("pressing del button calls delete method", async () => {
+    const buttons = wrapper.findAll(".btn");
+    const delSpy = vi.spyOn(wrapper.vm, "del");
+    const equalsButton = buttons[2];
+    await equalsButton.trigger("click");
+    expect(delSpy).toHaveBeenCalled();
+  });
+
+  it("pressing clear button calls clear method", async () => {
+    const buttons = wrapper.findAll(".btn");
+    const clearSpy = vi.spyOn(wrapper.vm, "clear");
+    const equalsButton = buttons[0];
+    await equalsButton.trigger("click");
+    expect(clearSpy).toHaveBeenCalled();
+  });
+
+  it("pressing ans button calls ans method", async () => {
+    const buttons = wrapper.findAll(".btn");
+    const ansSpy = vi.spyOn(wrapper.vm, "ans");
+    const equalsButton = buttons[1];
+    await equalsButton.trigger("click");
+    expect(ansSpy).toHaveBeenCalled();
   });
 });
