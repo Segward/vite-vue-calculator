@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import Calculator from "../components/Calculator.vue";
 
 describe("Calculator.vue", () => {
@@ -23,62 +23,6 @@ describe("Calculator.vue", () => {
     const buttons1 = wrapper.findAll(".btn")[3];
     await buttons1.trigger("click");
     expect(wrapper.find(".display").text()).toBe("1");
-  });
-
-  it("performs addition correctly", async () => {
-    const buttons = wrapper.findAll(".btn");
-    const operators = wrapper.findAll(".btn-op");
-    const button1 = buttons[3];
-    const button2 = buttons[4];
-    const addButton = operators[0];
-    const equalsButton = operators[4];
-    await button1.trigger("click");
-    await addButton.trigger("click");
-    await button2.trigger("click");
-    await equalsButton.trigger("click");
-    expect(wrapper.find(".display").text()).toBe("3");
-  });
-
-  it("performs subtraction correctly", async () => {
-    const buttons = wrapper.findAll(".btn");
-    const operators = wrapper.findAll(".btn-op");
-    const button1 = buttons[3];
-    const button2 = buttons[4];
-    const subtractButton = operators[1];
-    const equalsButton = operators[4];
-    await button2.trigger("click");
-    await subtractButton.trigger("click");
-    await button1.trigger("click");
-    await equalsButton.trigger("click");
-    expect(wrapper.find(".display").text()).toBe("1");
-  });
-
-  it("performs multiplication correctly", async () => {
-    const buttons = wrapper.findAll(".btn");
-    const operators = wrapper.findAll(".btn-op");
-    const button3 = buttons[5];
-    const button4 = buttons[6];
-    const multiplyButton = operators[2];
-    const equalsButton = operators[4];
-    await button3.trigger("click");
-    await multiplyButton.trigger("click");
-    await button4.trigger("click");
-    await equalsButton.trigger("click");
-    expect(wrapper.find(".display").text()).toBe("12");
-  });
-
-  it("performs division correctly", async () => {
-    const buttons = wrapper.findAll(".btn");
-    const operators = wrapper.findAll(".btn-op");
-    const button1 = buttons[3];
-    const button2 = buttons[4];
-    const divideButton = operators[3];
-    const equalsButton = operators[4];
-    await button1.trigger("click");
-    await divideButton.trigger("click");
-    await button2.trigger("click");
-    await equalsButton.trigger("click");
-    expect(wrapper.find(".display").text()).toBe("0.5");
   });
 
   it("clears the display", async () => {
@@ -120,5 +64,57 @@ describe("Calculator.vue", () => {
     const equalsButton = buttons[1];
     await equalsButton.trigger("click");
     expect(ansSpy).toHaveBeenCalled();
+  });
+
+  it("test simple addition buttons", async () => {
+    const buttons = wrapper.findAll(".btn");
+    const button1 = buttons[3]; // 1
+    const button2 = buttons[4]; // 2
+    const button3 = buttons[5]; // 3
+    const addition = wrapper.findAll(".btn-op")[0];
+    await button1.trigger("click");
+    await button2.trigger("click");
+    await addition.trigger("click");
+    await button3.trigger("click");
+    expect(wrapper.find(".display").text()).toBe("12+3");
+  });
+
+  it("test simple subtraction buttons", async () => {
+    const buttons = wrapper.findAll(".btn");
+    const button1 = buttons[3]; // 1
+    const button2 = buttons[4]; // 2
+    const button3 = buttons[5]; // 3
+    const subtraction = wrapper.findAll(".btn-op")[1];
+    await button1.trigger("click");
+    await button2.trigger("click");
+    await subtraction.trigger("click");
+    await button3.trigger("click");
+    expect(wrapper.find(".display").text()).toBe("12-3");
+  });
+
+  it("test simple multiplication buttons", async () => {
+    const buttons = wrapper.findAll(".btn");
+    const button1 = buttons[3]; // 1
+    const button2 = buttons[4]; // 2
+    const button3 = buttons[5]; // 3
+    const multiplication = wrapper.findAll(".btn-op")[2];
+    await button1.trigger("click");
+    await button2.trigger("click");
+    await multiplication.trigger("click");
+    await button3.trigger("click");
+    expect(wrapper.find(".display").text()).toBe("12*3");
+  });
+
+  it("test simple division buttons", async () => {
+    const buttons = wrapper.findAll(".btn");
+    const button1 = buttons[3]; // 1
+    const button2 = buttons[4]; // 2
+    const button3 = buttons[5]; // 3
+    const division = wrapper.findAll(".btn-op")[3];
+    await button1.trigger("click");
+    await button2.trigger("click");
+    await division.trigger("click");
+    await button3.trigger("click");
+    expect(wrapper.find(".display").text()).toBe("12/3");
   });
 });

@@ -117,10 +117,7 @@ const hasIllegalZeroLead = (value) => {
 
 const isInvalid = (value) => {
   if (
-    display.value === "Infinity" ||
-    display.value === "-Infinity" ||
     display.value === "Error" ||
-    display.value === "NaN" ||
     display.value === "." ||
     (display.value === "0" && value === "0")
   ) {
@@ -147,11 +144,7 @@ const append = (value) => {
 };
 
 const del = () => {
-  if (
-    display.value === "Infinity" ||
-    display.value === "-Infinity" ||
-    display.value === "Error"
-  ) {
+  if (display.value === "Error") {
     display.value = "0";
   } else if (display.value.length > 0) {
     display.value = display.value.slice(0, -1);
@@ -168,7 +161,7 @@ const getEquationResult = async (equation) => {
     const result = await axios.get(
       "http://localhost:8080/calculate?equation=" + encodeURIComponent(equation)
     );
-    return result.data.message;
+    return result.data.result;
   } catch (error) {
     console.error(error);
     return "Error";
@@ -176,14 +169,7 @@ const getEquationResult = async (equation) => {
 };
 
 const calculate = async () => {
-  if (
-    display.value === "Infinity" ||
-    display.value === "-Infinity" ||
-    display.value === "Error" ||
-    display.value === "NaN" ||
-    display.value.length === 1
-  )
-    return;
+  if (display.value === "Error" || display.value.length === 1) return;
   try {
     let equation = display.value;
     let answer = await getEquationResult(equation);
@@ -235,6 +221,7 @@ onUnmounted(() => {
   document.removeEventListener("keydown", keyPress);
   document.removeEventListener("keyup", keyRelease);
 });
+
 </script>
 
 <style scoped>

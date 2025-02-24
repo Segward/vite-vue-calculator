@@ -71,12 +71,12 @@ describe("Calculator", () => {
     cy.get(".display").should("have.text", "5");
   });
 
-  it("should display infinity for division by zero", () => {
+  it("should display error for division by zero", () => {
     cy.get(".btn").contains("1").click();
     cy.get(".btn-op").contains("/").click();
     cy.get(".btn").contains("0").click();
     cy.get(".btn-op").contains("=").click();
-    cy.get(".display").should("have.text", "Infinity");
+    cy.get(".display").should("have.text", "Error");
   });
 
   it("should display history of calculations", () => {
@@ -85,5 +85,37 @@ describe("Calculator", () => {
     cy.get(".btn").contains("3").click();
     cy.get(".btn-op").contains("=").click();
     cy.get(".history ul li").should("contain.text", "2+3 = 5");
+  });
+
+  it("correct spring-boot backend response", () => {
+    cy.request("http://localhost:8080/calculate?equation=" + encodeURIComponent("2+3")).then(
+      (response) => {
+        expect(response.body.result).to.equal("5");
+      }
+    );
+  });
+
+  it("correct spring-boot backend response", () => {
+    cy.request("http://localhost:8080/calculate?equation=" + encodeURIComponent("2-3")).then(
+      (response) => {
+        expect(response.body.result).to.equal("-1");
+      }
+    );
+  });
+
+  it("correct spring-boot backend response", () => {
+    cy.request("http://localhost:8080/calculate?equation=" + encodeURIComponent("2*3")).then(
+      (response) => {
+        expect(response.body.result).to.equal("6");
+      }
+    );
+  });
+
+  it("correct spring-boot backend response", () => {
+    cy.request("http://localhost:8080/calculate?equation=" + encodeURIComponent("2/3")).then(
+      (response) => {
+        expect(response.body.result).to.equal("0.66667");
+      }
+    );
   });
 });
