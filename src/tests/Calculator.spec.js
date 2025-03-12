@@ -11,7 +11,7 @@ describe("Calculator.vue", () => {
 
   it("renders calculator buttons", () => {
     const buttons = wrapper.findAll(".btn, .btn-op");
-    expect(buttons.length).toBe(19);
+    expect(buttons.length).toBe(20);
   });
 
   it("displays initial value of 0", () => {

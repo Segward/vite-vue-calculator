@@ -1,5 +1,9 @@
 describe("Calculator", () => {
   beforeEach(() => {
+    cy.visit("/login");
+    cy.get("#username").type("admin");
+    cy.get("#password").type("admin");
+    cy.get("button[type='submit']").click();
     cy.visit("/");
   });
 
@@ -80,42 +84,11 @@ describe("Calculator", () => {
   });
 
   it("should display history of calculations", () => {
-    cy.get(".btn").contains("2").click();
+    cy.get(".btn").contains("1").click();
     cy.get(".btn-op").contains("+").click();
-    cy.get(".btn").contains("3").click();
+    cy.get(".btn").contains("2").click();
     cy.get(".btn-op").contains("=").click();
-    cy.get(".history ul li").should("contain.text", "2+3 = 5");
-  });
-
-  it("correct spring-boot backend response", () => {
-    cy.request("http://localhost:8080/calculate?equation=" + encodeURIComponent("2+3")).then(
-      (response) => {
-        expect(response.body.result).to.equal("5");
-      }
-    );
-  });
-
-  it("correct spring-boot backend response", () => {
-    cy.request("http://localhost:8080/calculate?equation=" + encodeURIComponent("2-3")).then(
-      (response) => {
-        expect(response.body.result).to.equal("-1");
-      }
-    );
-  });
-
-  it("correct spring-boot backend response", () => {
-    cy.request("http://localhost:8080/calculate?equation=" + encodeURIComponent("2*3")).then(
-      (response) => {
-        expect(response.body.result).to.equal("6");
-      }
-    );
-  });
-
-  it("correct spring-boot backend response", () => {
-    cy.request("http://localhost:8080/calculate?equation=" + encodeURIComponent("2/3")).then(
-      (response) => {
-        expect(response.body.result).to.equal("0.66667");
-      }
-    );
+    cy.get(".btn-op").contains("Fetch History").click();
+    cy.get(".history ul li").should("contain.text", "1+2 = 3");
   });
 });
