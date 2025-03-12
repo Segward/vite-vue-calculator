@@ -2,6 +2,7 @@
   <div class="navigator">
     <a href="/"><button>Calculator</button></a>
     <a href="/contact"><button>Contact</button></a>
+    <a href="/login"><button>Login</button></a>
   </div>
 </template>
 

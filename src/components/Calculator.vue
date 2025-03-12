@@ -29,13 +29,14 @@
         <li v-for="item in history" :key="item">{{ item }}</li>
       </ul>
     </div>
+    <button @click="fetch()" class="btn-op">Fetch History</button>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 import Navigator from "./Navigator.vue";
-import axios from "axios";
+import {getToken, getCalculate, getFetch } from "../Backend";
 
 const display = ref("0");
 const history = ref([]);
@@ -156,31 +157,25 @@ const del = () => {
   }
 };
 
-const getEquationResult = async (equation) => {
-  try {
-    const result = await axios.get(
-      "http://localhost:8080/calculate?equation=" + encodeURIComponent(equation)
-    );
-    return result.data.result;
-  } catch (error) {
-    console.error(error);
-    return "Error";
-  }
-};
-
 const calculate = async () => {
   if (display.value === "Error" || display.value.length === 1) return;
   try {
-    let equation = display.value;
-    let answer = await getEquationResult(equation);
-    let historyItem = `${equation} = ${answer}`;
-    history.value.push(historyItem);
+    const equation = display.value;
+    const jwtToken = getToken();
+    const urlEquation = encodeURIComponent(equation);
+    const answer = await getCalculate(jwtToken, urlEquation);
     display.value = answer;
     previous = answer;
   } catch (error) {
     console.error(error);
     display.value = "Error";
   }
+};
+
+const fetch = async () => {
+  let jwtToken = getToken();
+  let historyData = await getFetch(jwtToken);
+  history.value = historyData;
 };
 
 const keyPress = (event) => {
@@ -221,7 +216,6 @@ onUnmounted(() => {
   document.removeEventListener("keydown", keyPress);
   document.removeEventListener("keyup", keyRelease);
 });
-
 </script>
 
 <style scoped>
