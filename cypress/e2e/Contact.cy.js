@@ -6,6 +6,7 @@ describe("Contact Form", () => {
     cy.get("button[type='submit']").click();
     cy.visit("/contact");
   });
+  
   it("should enable the submit button when the form is valid", () => {
     cy.get("#name").type("John Doe");
     cy.get("#email").type("john.doe@example.com");

@@ -11,7 +11,7 @@
         <h2>Enter your password</h2>
         <input type="password" id="password" />
       </div>
-      <button type="submit" @click="submitForm">Submit</button>
+      <button type="submit">Submit</button>
     </form>
   </div>
 </template>
@@ -24,9 +24,15 @@ import { storeToken, getAuth } from "../Backend";
 const submitForm = async () => {
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
-  const jwtToken = await getAuth(username, password);
-  storeToken(jwtToken);
-  window.location.reload();
+  try {
+    const jwtToken = await getAuth(username, password);
+    storeToken(jwtToken);
+    window.location.reload();
+    alert("Login successful");
+  } catch (error) {
+    console.error(error);
+    alert("Invalid username or password");
+  }
 };
 </script>
 
