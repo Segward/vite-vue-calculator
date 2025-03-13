@@ -187,10 +187,15 @@ const calculate = async () => {
 };
 
 const fetchHistory = async () => {
-  const count = Math.max(historyCount.value, 10); // Ensure minimum of 10
-  const jwtToken = getToken();
-  const historyData = await getFetch(jwtToken, count);
-  history.value = historyData;
+  try {
+    const count = Math.max(historyCount.value, 10); // Ensure minimum of 10
+    const jwtToken = getToken();
+    const historyData = await getFetch(jwtToken, count);
+    history.value = historyData;
+  } catch (error) {
+    console.error(error);
+    alert("You must be logged in to fetch history.");
+  }
 };
 
 const keyPress = (event) => {
