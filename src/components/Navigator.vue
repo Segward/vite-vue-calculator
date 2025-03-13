@@ -1,6 +1,6 @@
 <template>
   <div class="navigator">
-    <div v-if="token" class="token-display">{{ token }}</div>
+    <div v-if="username" class="username-display">{{ username }}</div>
     <a href="/"><button>Calculator</button></a>
     <a href="/contact"><button>Contact</button></a>
     <a href="/login"><button>Login</button></a>
@@ -9,14 +9,12 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { getToken } from "../Backend";
+import { getUsername } from "../Backend";
 
-const token = ref("");
+const username = ref("");
 
 onMounted(() => {
-  if (getToken()) {
-    token.value = getToken();
-  }
+  username.value = getUsername();
 });
 </script>
 
@@ -48,14 +46,9 @@ button {
   height: 50px;
 }
 
-.token-display {
-  position: relative;
-  font-size: 1em;
-  color: black;
+.username-display {
+  font-size: 3em;
+  color: purple;
   padding: 5px;
-  border-radius: 5px;
-  max-width: 1000px;
-  word-wrap: break-word;
-  white-space: pre-wrap;
 }
 </style>

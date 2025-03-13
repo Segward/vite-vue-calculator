@@ -19,7 +19,7 @@
 <script setup>
 import Navigator from "./Navigator.vue";
 
-import { storeToken, getAuth } from "../Backend";
+import { storeToken, getAuth, storeUsername } from "../Backend";
 
 const submitForm = async () => {
   const username = document.getElementById("username").value;
@@ -27,6 +27,7 @@ const submitForm = async () => {
   try {
     const jwtToken = await getAuth(username, password);
     storeToken(jwtToken);
+    storeUsername(username);
     window.location.reload();
     alert("Login successful");
   } catch (error) {

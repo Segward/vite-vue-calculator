@@ -11,6 +11,17 @@ export const getToken = () => {
   return token;
 };
 
+export const storeUsername = (username) => {
+  sessionStorage.setItem("username", username);
+  console.log("Username stored:", username); // Log the stored username
+}
+
+export const getUsername = () => {
+  const username = sessionStorage.getItem("username");
+  console.log("Retrieved username:", username); // Log the retrieved username
+  return username;
+}
+
 export async function getAuth(username, password) {
   try {
     const request = `http://localhost:8080/api/auth/token?username=${username}&password=${password}`;
