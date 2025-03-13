@@ -63,29 +63,34 @@ const validateForm = () => {
 
 const submitForm = async () => {
   if (submittable.value) {
-    const jwt = getToken();
-    if (!jwt) {
-      alert("You must be logged in to submit the form.");
-      return;
-    }
     try {
+      const jwt = getToken();
+      if (!jwt) {
+        alert("You must be logged in to submit the form.");
+        return;
+      }
       const valid = await getValidate(jwt);
       if (!valid) {
         alert("Invalid token. Please log in again.");
         return;
       }
-      const response = await postContact(jwt, name.value, email.value, message.value);
+      const response = await postContact(
+        jwt,
+        name.value,
+        email.value,
+        message.value
+      );
       if (response) {
         name.value = "";
         email.value = "";
         message.value = "";
         alert("Form submitted successfully!");
       } else {
-        alert("There was an error submitting the form.");
+        alert("There was an error submitting the form. 1");
       }
     } catch (error) {
       console.error("Error during form submission:", error);
-      alert("There was an error submitting the form.");
+      alert("There was an error submitting the form. 2");
     }
   } else {
     alert("Please fill out the form correctly.");

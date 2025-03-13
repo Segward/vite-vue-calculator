@@ -85,9 +85,8 @@ export async function getValidate(token) {
         "Content-Type": "application/json",
       },
     });
-    const data = response.data;
-    console.log(data);
-    return data;
+    const result = response.data;
+    return result;
   } catch (error) {
     console.error("Error during validation:", error); // Log any errors
     throw error; // Rethrow the error to handle it in the calling function
