@@ -29,17 +29,22 @@
         <li v-for="item in history" :key="item">{{ item }}</li>
       </ul>
     </div>
-    <button @click="fetch()" class="btn-op">Fetch History</button>
+    <div class="history-form">
+      <label for="historyCount">History Count</label>
+      <input type="number" v-model.number="historyCount" min="10" />
+      <button @click="fetchHistory()" class="btn-op">Fetch History</button>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 import Navigator from "./Navigator.vue";
-import {getToken, getCalculate, getFetch, getValidate } from "../Backend";
+import { getToken, getCalculate, getFetch, getValidate } from "../Backend";
 
 const display = ref("0");
 const history = ref([]);
+const historyCount = ref(10); // Default value for history count
 const pressedKeys = ref([]);
 let previous = "";
 
@@ -181,9 +186,10 @@ const calculate = async () => {
   }
 };
 
-const fetch = async () => {
-  let jwtToken = getToken();
-  let historyData = await getFetch(jwtToken);
+const fetchHistory = async () => {
+  const count = Math.max(historyCount.value, 10); // Ensure minimum of 10
+  const jwtToken = getToken();
+  const historyData = await getFetch(jwtToken, count);
   history.value = historyData;
 };
 
@@ -277,6 +283,19 @@ onUnmounted(() => {
   background-color: var(--primary-color);
   border-radius: 5px;
   padding-left: 1rem;
+}
+
+.history-form {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+input {
+  width: 100px;
+  height: 30px;
+  margin-bottom: 10px;
 }
 
 .btn {

@@ -57,9 +57,9 @@ export async function getCalculate(token, equation) {
   return result;
 }
 
-export async function getFetch(token) {
+export async function getFetch(token, count) {
   console.log("Using token:", token); // Log the token being used for debugging
-  const request = `http://localhost:8080/api/fetch?jwt=${token}`;
+  const request = `http://localhost:8080/api/fetch?jwt=${token}&count=${count}`;
   const response = await axios.get(request, {
     headers: {
       "Content-Type": "application/json",
