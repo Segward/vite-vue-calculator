@@ -21,19 +21,20 @@
       </div>
       <button type="submit" :disabled="!submittable">Submit</button>
     </form>
+    <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { useStore } from "vuex";
+import { ref } from "vue";
 import Navigator from "./Navigator.vue";
+import { getToken, postContact } from "../Backend";
 
-const store = useStore();
-const name = ref(store.getters.getName);
-const email = ref(store.getters.getEmail);
-const message = ref(store.getters.getMessage);
+const name = ref("");
+const email = ref("");
+const message = ref("");
 const submittable = ref(false);
+const errorMessage = ref("");
 
 const validateEmail = (email) => {
   const re = /\S+@\S+\.\S+/;
@@ -62,27 +63,25 @@ const validateForm = () => {
 
 const submitForm = async () => {
   if (submittable.value) {
-    const response = await store.dispatch("saveUserData", {
-      name: name.value,
-      email: email.value,
-      message: message.value,
-    });
-    if (response && (response.status === 200 || response.status === 201)) {
-      name.value = "";
-      email.value = "";
-      message.value = "";
-      alert("Form submitted successfully!");
-    } else {
+    const jwt = getToken();
+    try {
+      const response = await postContact(jwt, name.value, email.value, message.value);
+      if (response) {
+        name.value = "";
+        email.value = "";
+        message.value = "";
+        alert("Form submitted successfully!");
+      } else {
+        alert("There was an error submitting the form.");
+      }
+    } catch (error) {
+      console.error("Error during form submission:", error);
       alert("There was an error submitting the form.");
     }
   } else {
     alert("Please fill out the form correctly.");
   }
 };
-
-onMounted(async () => {
-  await store.dispatch("loadUserData");
-});
 </script>
 
 <style scoped>
@@ -117,5 +116,10 @@ button {
 
 button:disabled {
   cursor: not-allowed;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
 }
 </style>

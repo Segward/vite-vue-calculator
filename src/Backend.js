@@ -63,3 +63,15 @@ export async function getFetch(token) {
   }
   return history;
 }
+
+export async function postContact(token, name, email, message) {
+  console.log("Using token:", token); // Log the token being used for debugging
+  const request = `http://localhost:8080/api/contact?jwt=${token}&name=${name}&email=${email}&message=${message}`;
+  const response = await axios.post(request, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const result = response.data;
+  return result;
+}
