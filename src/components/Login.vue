@@ -26,6 +26,7 @@ const submitForm = async () => {
   const password = document.getElementById("password").value;
   const jwtToken = await getAuth(username, password);
   storeToken(jwtToken);
+  window.location.reload();
 };
 </script>
 

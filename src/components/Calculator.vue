@@ -36,7 +36,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 import Navigator from "./Navigator.vue";
-import {getToken, getCalculate, getFetch } from "../Backend";
+import {getToken, getCalculate, getFetch, getValidate } from "../Backend";
 
 const display = ref("0");
 const history = ref([]);
@@ -160,10 +160,19 @@ const del = () => {
 const calculate = async () => {
   if (display.value === "Error" || display.value.length === 1) return;
   try {
+    const jwt = getToken();
+    if (!jwt) {
+      alert("You must be logged in to submit the form.");
+      return;
+    }
+    const valid = await getValidate(jwt);
+    if (!valid) {
+      alert("Invalid token. Please log in again.");
+      return;
+    }
     const equation = display.value;
-    const jwtToken = getToken();
     const urlEquation = encodeURIComponent(equation);
-    const answer = await getCalculate(jwtToken, urlEquation);
+    const answer = await getCalculate(jwt, urlEquation);
     display.value = answer;
     previous = answer;
   } catch (error) {

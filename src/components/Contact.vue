@@ -28,7 +28,7 @@
 <script setup>
 import { ref } from "vue";
 import Navigator from "./Navigator.vue";
-import { getToken, postContact } from "../Backend";
+import { getToken, postContact, getValidate } from "../Backend";
 
 const name = ref("");
 const email = ref("");
@@ -64,7 +64,16 @@ const validateForm = () => {
 const submitForm = async () => {
   if (submittable.value) {
     const jwt = getToken();
+    if (!jwt) {
+      alert("You must be logged in to submit the form.");
+      return;
+    }
     try {
+      const valid = await getValidate(jwt);
+      if (!valid) {
+        alert("Invalid token. Please log in again.");
+        return;
+      }
       const response = await postContact(jwt, name.value, email.value, message.value);
       if (response) {
         name.value = "";

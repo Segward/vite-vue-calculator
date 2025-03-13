@@ -75,3 +75,21 @@ export async function postContact(token, name, email, message) {
   const result = response.data;
   return result;
 }
+
+export async function getValidate(token) {
+  try {
+    console.log("Using token:", token); // Log the token being used for debugging
+    const request = `http://localhost:8080/api/auth/validate?jwt=${token}`;
+    const response = await axios.get(request, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = response.data;
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error("Error during validation:", error); // Log any errors
+    throw error; // Rethrow the error to handle it in the calling function
+  }
+}
