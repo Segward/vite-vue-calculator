@@ -199,7 +199,7 @@ const fetchHistory = async () => {
       alert("Invalid token. Please log in again.");
       return;
     }
-    const historyData = await getFetch(jwtToken, count);
+    const historyData = await getFetch(jwt, count);
     history.value = historyData;
   } catch (error) {
     console.error(error);
