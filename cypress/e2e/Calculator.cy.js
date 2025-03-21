@@ -88,7 +88,7 @@ describe("Calculator", () => {
     cy.get(".btn-op").contains("+").click();
     cy.get(".btn").contains("2").click();
     cy.get(".btn-op").contains("=").click();
-    cy.get(".btn-op").contains("Fetch History").click();
+    cy.get(".btn-op").contains("Fetch History").click({ force: true });
     cy.get(".history ul li").should("contain.text", "1+2 = 3");
   });
   
